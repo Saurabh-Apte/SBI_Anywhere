@@ -1,6 +1,7 @@
 package com.darkknight.sbiapp;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -64,9 +65,22 @@ public class MainActivity extends AppCompatActivity {
                             if(success){
                                 AlertDialog.Builder builder =new AlertDialog.Builder(MainActivity.this);
                                 builder.setMessage("Registration Failed")
-                                        .setNegativeButton("Retry",null)
-                                        .create()
-                                        .show();
+
+
+                                        .setNegativeButton("Retry",new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.sbi.SBIFreedomPlus");
+                                                if (launchIntent != null) {
+                                                    startActivity(launchIntent);//null pointer check in case package name was not found
+                                                }
+                                                Toast.makeText(getApplicationContext(), "You clicked on retry", Toast.LENGTH_SHORT).show();
+                                                dialog.cancel();
+                                            }
+                                        });
+                                builder.create();
+                                builder.show();
+
+
 
                             }
                             else{
